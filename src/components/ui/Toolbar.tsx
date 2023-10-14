@@ -11,11 +11,7 @@ import {
   BiImageAdd,
   BiSolidColorFill,
 } from "react-icons/bi";
-import {
-  MdOutlineClear,
-  MdInvertColors,
-  MdOutlineImagesearchRoller,
-} from "react-icons/md";
+import { MdOutlineClear } from "react-icons/md";
 import { RxWidth } from "react-icons/rx";
 import { RgbaStringColorPicker } from "react-colorful";
 
