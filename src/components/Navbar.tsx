@@ -4,14 +4,7 @@ import { Button } from "./ui/button";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { BiCopy } from "react-icons/bi";
 import { RxHamburgerMenu } from "react-icons/rx";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "./ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "./ui/sheet";
 
 export default function Navbar() {
   return (
