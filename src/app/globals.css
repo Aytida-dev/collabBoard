@@ -59,6 +59,7 @@
     @apply bg-background text-foreground;
   }
   /* make dark mode as default */
+
   @media (prefers-color-scheme: dark) {
     body {
       @apply dark;
