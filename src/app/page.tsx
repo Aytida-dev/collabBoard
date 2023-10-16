@@ -6,8 +6,9 @@ export default function Home() {
   return (
     <div className="h-[calc(100vh-100px)]  ">
       <Navbar />
-      <div className="flex justify-between  h-full ">
+      <div className="flex justify-between  h-full gap-2 mt-2">
         <Toolbar />
+        {/* <Canvas socket={socket} /> */}
         <Userbar />
       </div>
     </div>
