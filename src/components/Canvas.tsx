@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useStore } from "../lib/ZustandStore";
+import { Button } from "./ui/button";
 
 // import { io } from "socket.io-client";
 

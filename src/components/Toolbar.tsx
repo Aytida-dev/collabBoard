@@ -6,6 +6,7 @@ import {
   BiPencil,
   BiEraser,
   BiUndo,
+  BiRedo,
   BiSave,
   BiImageAdd,
   BiSolidColorFill,
@@ -25,6 +26,7 @@ import { useState } from "react";
 
 export default function Toolbar() {
   const {
+    canvasRef,
     exportAsImage,
     setStrokeWidth,
     strokeWidth,
@@ -36,7 +38,7 @@ export default function Toolbar() {
     setStrokeColor,
     undo,
     clear,
-    redo,
+
     setBgImageUrl,
     setEraser,
     eraser,
@@ -49,13 +51,11 @@ export default function Toolbar() {
   function undoRedoAndClear(type: string) {
     switch (type) {
       case "undo":
-        undo();
+        undo(canvasRef);
         break;
-      case "redo":
-        redo();
-        break;
+
       case "clear":
-        clear();
+        clear(canvasRef);
         break;
     }
   }
@@ -63,13 +63,13 @@ export default function Toolbar() {
   function handleExportType(type: string) {
     switch (type) {
       case "jpeg":
-        exportAsImage("jpeg");
+        exportAsImage(canvasRef, "jpeg");
         break;
       case "png":
-        exportAsImage("png");
+        exportAsImage(canvasRef, "png");
         break;
       case "svg":
-        exportSvg();
+        exportSvg(canvasRef);
         break;
     }
   }
@@ -80,7 +80,7 @@ export default function Toolbar() {
         <Toggle
           size={"lg"}
           className="rounded-full"
-          onClick={() => setEraser()}
+          onClick={() => setEraser(canvasRef, eraser)}
         >
           {eraser ? (
             <BiEraser className="text-xl" />
