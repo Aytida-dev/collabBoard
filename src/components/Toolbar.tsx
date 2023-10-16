@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "./ui/button";
 import { Toggle } from "./ui/toggle";
 import {
@@ -21,12 +20,59 @@ import { Slider } from "./ui/slider";
 import { Input } from "./ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
+import { useStore } from "../lib/ZustandStore";
+import { useState } from "react";
+
 export default function Toolbar() {
-  const [toogle, setToogle] = useState(false);
-  const [penWidth, setPenWidth] = useState(10);
-  const [eraserWidth, setEraserWidth] = useState(10);
-  const [penColor, setPenColor] = useState("rgba(0,0,0,1)");
-  const [bgColor, setBgColor] = useState("rgba(255,255,255,1)");
+  const {
+    exportAsImage,
+    setStrokeWidth,
+    strokeWidth,
+    eraserWidth,
+    setEraserWidth,
+    bgColor,
+    setBgColor,
+    strokeColor,
+    setStrokeColor,
+    undo,
+    clear,
+    redo,
+    setBgImageUrl,
+    setEraser,
+    eraser,
+    bgImageUrl,
+    exportSvg,
+  } = useStore();
+
+  const [bgImageUrlState, setBgImageUrlState] = useState(bgImageUrl);
+
+  function undoRedoAndClear(type: string) {
+    switch (type) {
+      case "undo":
+        undo();
+        break;
+      case "redo":
+        redo();
+        break;
+      case "clear":
+        clear();
+        break;
+    }
+  }
+
+  function handleExportType(type: string) {
+    switch (type) {
+      case "jpeg":
+        exportAsImage("jpeg");
+        break;
+      case "png":
+        exportAsImage("png");
+        break;
+      case "svg":
+        exportSvg();
+        break;
+    }
+  }
 
   function Tools(mobile = false) {
     return (
@@ -34,12 +80,12 @@ export default function Toolbar() {
         <Toggle
           size={"lg"}
           className="rounded-full"
-          onClick={() => setToogle((prev) => !prev)}
+          onClick={() => setEraser()}
         >
-          {toogle ? (
-            <BiPencil className="text-xl" />
-          ) : (
+          {eraser ? (
             <BiEraser className="text-xl" />
+          ) : (
+            <BiPencil className="text-xl" />
           )}
         </Toggle>
 
@@ -59,15 +105,15 @@ export default function Toolbar() {
                   max={100}
                   step={1}
                   min={1}
-                  value={[penWidth]}
-                  onValueChange={(value) => setPenWidth(value[0])}
-                  // onValueCommit={() => console.log("commit")} // use for the store
+                  value={[strokeWidth]}
+                  onValueChange={(value) => setStrokeWidth(value[0])}
+                  // onValueCommit={(value) => setStrokeWidth(value[0])}
                 />
                 <Input
                   className="w-20"
                   type="number"
-                  value={penWidth}
-                  onChange={(e) => setPenWidth(e.target.valueAsNumber)}
+                  value={strokeWidth}
+                  onChange={(e) => setStrokeWidth(e.target.valueAsNumber)}
                 />
               </div>
               <div className="flex justify-between items-center gap-4 w-full">
@@ -106,14 +152,14 @@ export default function Toolbar() {
               <div className="flex flex-col gap-4 justify-between items-center">
                 <span>Stroke Color</span>
                 <RgbaStringColorPicker
-                  color={penColor}
-                  onChange={(color) => setPenColor(color)}
+                  color={strokeColor}
+                  onChange={(color) => setStrokeColor(color)}
                 />
                 <Input
                   className=""
                   type="text"
-                  value={penColor}
-                  onChange={(e) => setPenColor(e.target.value)}
+                  value={strokeColor}
+                  onChange={(e) => setStrokeColor(e.target.value)}
                 />
               </div>
 
@@ -134,11 +180,11 @@ export default function Toolbar() {
           </PopoverContent>
         </Popover>
 
-        <Button variant={"ghost"}>
+        <Button variant={"ghost"} onClick={() => undoRedoAndClear("undo")}>
           <BiUndo className="text-xl" />
         </Button>
 
-        <Button variant={"ghost"}>
+        <Button variant={"ghost"} onClick={() => undoRedoAndClear("undo")}>
           <MdOutlineClear className="text-xl" />
         </Button>
 
@@ -155,8 +201,15 @@ export default function Toolbar() {
             <div className="flex flex-col justify-between items-center gap-4">
               <span>Enter Img URL</span>
               <div className="flex justify-between items-center gap-4 w-full">
-                <Input type="string" placeholder="image url" />
-                <Button>Apply</Button>
+                <Input
+                  type="string"
+                  placeholder="image url"
+                  value={bgImageUrlState}
+                  onChange={(e) => setBgImageUrlState(e.target.value)}
+                />
+                <Button onClick={() => setBgImageUrl(bgImageUrlState)}>
+                  Apply
+                </Button>
               </div>
               <span className=" text-blue-500 text-center">
                 leave empty, <br />
@@ -174,9 +227,15 @@ export default function Toolbar() {
           </PopoverTrigger>
           <PopoverContent side={`${mobile ? "top" : "right"}`}>
             <div className="flex flex-col justify-between items-center gap-4">
-              <Button>Export as jpeg</Button>
-              <Button>Export as png</Button>
-              <Button>Export as SVG</Button>
+              <Button onClick={() => handleExportType("jpeg")}>
+                Export as jpeg
+              </Button>
+              <Button onClick={() => handleExportType("png")}>
+                Export as png
+              </Button>
+              <Button onClick={() => handleExportType("svg")}>
+                Export as SVG
+              </Button>
               <Button>Export stroke paths in a file</Button>
             </div>
           </PopoverContent>
