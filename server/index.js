@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log("a user connected ", socket.id);
 
   socket.on("drawing", (data) => {
     socket.broadcast.emit("received-drawing", data);
