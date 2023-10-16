@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "./button";
-import { Toggle } from "./toggle";
+import { Button } from "./ui/button";
+import { Toggle } from "./ui/toggle";
 import {
   BiPencil,
   BiEraser,
@@ -16,10 +16,10 @@ import { RxWidth } from "react-icons/rx";
 import { RgbaStringColorPicker } from "react-colorful";
 import { LiaToolsSolid } from "react-icons/lia";
 
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { Slider } from "./slider";
-import { Input } from "./input";
-import { Sheet, SheetContent, SheetTrigger } from "./sheet";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Slider } from "./ui/slider";
+import { Input } from "./ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
 export default function Toolbar() {
   const [toogle, setToogle] = useState(false);
@@ -44,7 +44,7 @@ export default function Toolbar() {
         </Toggle>
 
         {/* width slider */}
-        <Popover modal={!mobile}>
+        <Popover>
           <PopoverTrigger>
             <div className=" w-10 flex justify-center ">
               <RxWidth className="text-xl" />
@@ -92,7 +92,7 @@ export default function Toolbar() {
         </Popover>
 
         {/* color picker */}
-        <Popover modal={!mobile}>
+        <Popover>
           <PopoverTrigger>
             <div className=" w-10 flex justify-center">
               <BiSolidColorFill className="text-xl" />
@@ -142,7 +142,7 @@ export default function Toolbar() {
           <MdOutlineClear className="text-xl" />
         </Button>
 
-        <Popover modal={!mobile}>
+        <Popover>
           <PopoverTrigger>
             <div className=" w-10 flex justify-center">
               <BiImageAdd className="text-xl" />
@@ -166,7 +166,7 @@ export default function Toolbar() {
           </PopoverContent>
         </Popover>
 
-        <Popover modal={!mobile}>
+        <Popover>
           <PopoverTrigger>
             <div className=" w-10 flex justify-center">
               <BiSave className="text-xl" />
@@ -186,7 +186,7 @@ export default function Toolbar() {
   }
   return (
     <>
-      <div className=" hidden w-16 h-5/6 bg-black my-auto rounded-r-xl md:flex flex-col justify-between items-center py-10 pr-2">
+      <div className=" hidden w-16 h-full bg-black my-auto rounded-r-xl md:flex flex-col justify-between items-center py-10 pr-2">
         {Tools()}
       </div>
 
