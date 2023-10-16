@@ -1,3 +1,4 @@
+import Canvas from "@/components/Canvas";
 import Navbar from "@/components/Navbar";
 import Toolbar from "@/components/Toolbar";
 import Userbar from "@/components/Userbar";
@@ -8,7 +9,7 @@ export default function Home() {
       <Navbar />
       <div className="flex justify-between  h-full gap-2 mt-2">
         <Toolbar />
-        {/* <Canvas socket={socket} /> */}
+        <Canvas />
         <Userbar />
       </div>
     </div>
