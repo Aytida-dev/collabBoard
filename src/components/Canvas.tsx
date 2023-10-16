@@ -1,5 +1,5 @@
 "use client";
-"use strict";
+
 import { useEffect, useRef } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 
