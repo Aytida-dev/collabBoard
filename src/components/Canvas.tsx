@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 
 import { io } from "socket.io-client";
-import { Button } from "./ui/button";
 
 const socket = io("http://192.168.152.44:5000");
 
