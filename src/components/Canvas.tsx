@@ -3,7 +3,6 @@
 import { useEffect, useRef } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useStore } from "../lib/ZustandStore";
-import { Button } from "./ui/button";
 
 // import { io } from "socket.io-client";
 
@@ -22,6 +21,7 @@ const Canvas = () => {
     strokeColor,
     bgColor,
     bgImageUrl,
+    eraser,
   } = useStore();
 
   const canvasRef = useRef<any>(null);
@@ -54,7 +54,12 @@ const Canvas = () => {
   }
 
   return (
-    <>
+    <div
+      className="w-full h-full"
+      style={{
+        cursor: `${eraser ? "cell" : "crosshair"}`,
+      }}
+    >
       <ReactSketchCanvas
         id="1"
         style={styles}
@@ -67,7 +72,7 @@ const Canvas = () => {
         backgroundImage={bgImageUrl}
         exportWithBackgroundImage={true}
       />
-    </>
+    </div>
   );
 };
 

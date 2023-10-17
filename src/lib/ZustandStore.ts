@@ -38,7 +38,7 @@ export const useStore = create<Store & StoreActions>((set) => ({
   },
 
   clear: (canvasRef) => {
-    canvasRef.clear();
+    canvasRef.clearCanvas();
   },
   bgImageUrl: "",
   exportAsImage: (canvasRef, type) => {

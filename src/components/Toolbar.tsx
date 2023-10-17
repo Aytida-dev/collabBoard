@@ -184,7 +184,7 @@ export default function Toolbar() {
           <BiUndo className="text-xl" />
         </Button>
 
-        <Button variant={"ghost"} onClick={() => undoRedoAndClear("undo")}>
+        <Button variant={"ghost"} onClick={() => undoRedoAndClear("clear")}>
           <MdOutlineClear className="text-xl" />
         </Button>
 
