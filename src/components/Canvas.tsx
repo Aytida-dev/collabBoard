@@ -4,10 +4,6 @@ import { useEffect, useRef } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useStore } from "../lib/ZustandStore";
 
-// import { io } from "socket.io-client";
-
-// const socket = io("http://192.168.152.44:5000");
-
 const styles = {
   border: "0.0625rem solid #9c9c9c",
   borderRadius: "0.25rem",
@@ -15,6 +11,7 @@ const styles = {
 
 const Canvas = () => {
   const {
+    socket,
     setCanvasRef,
     strokeWidth,
     eraserWidth,
@@ -26,18 +23,34 @@ const Canvas = () => {
 
   const canvasRef = useRef<any>(null);
 
-  // useEffect(() => {
-  //   socket.on("connect", () => {
-  //     console.log("connected");
-  //   });
-  //   socket.on("received-drawing", (paths: any) => {
-  //     canvasRef.current.loadPaths([paths]);
-  //   });
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+    socket.on("received-drawing", (paths: any) => {
+      canvasRef.current.loadPaths([paths]);
+    });
 
-  //   return () => {
-  //     socket.off("received-drawing");
-  //   };
-  // }, []);
+    socket.on("undo-or-clear", ({ type }: { type: string }) => {
+      switch (type) {
+        case "undo":
+          canvasRef.current.undo();
+          break;
+
+        case "clear":
+          canvasRef.current.clearCanvas();
+          break;
+
+        default:
+          break;
+      }
+      console.log("undo");
+    });
+
+    return () => {
+      socket.off("received-drawing");
+    };
+  }, []);
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -50,7 +63,7 @@ const Canvas = () => {
     //create an deep copy of currentpath as shallow one was giving erroes
     const lastPath = JSON.parse(JSON.stringify(currentPath));
 
-    // socket.emit("drawing", lastPath);
+    socket.emit("drawing", lastPath);
   }
 
   return (

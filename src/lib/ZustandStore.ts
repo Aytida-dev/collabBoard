@@ -1,6 +1,9 @@
 import { create } from "zustand";
+import { io } from "socket.io-client";
+const socket = io("http://192.168.152.114:5000");
 
 type Store = {
+  socket: any;
   canvasRef: any | null;
   eraser: boolean;
   eraserWidth: number;
@@ -27,6 +30,7 @@ type StoreActions = {
 };
 
 export const useStore = create<Store & StoreActions>((set) => ({
+  socket: socket,
   canvasRef: null,
   eraser: false,
   eraserWidth: 8,
@@ -34,10 +38,13 @@ export const useStore = create<Store & StoreActions>((set) => ({
   strokeColor: "rgba(0,0,0,1)",
   bgColor: "rgba(255,255,255,1)",
   undo: (canvasRef) => {
+    socket.emit("undo-or-clear", { type: "undo" });
     canvasRef.undo();
   },
 
   clear: (canvasRef) => {
+    socket.emit("undo-or-clear", { type: "clear" });
+
     canvasRef.clearCanvas();
   },
   bgImageUrl: "",

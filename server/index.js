@@ -17,6 +17,10 @@ io.on("connection", (socket) => {
   socket.on("drawing", (data) => {
     socket.broadcast.emit("received-drawing", data);
   });
+
+  socket.on("undo-or-clear", (type) => {
+    socket.broadcast.emit("undo-or-clear", type);
+  });
 });
 
 app.get("/", (req, res) => {
