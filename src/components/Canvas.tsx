@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useStore } from "../lib/ZustandStore";
 
+import { downloadImage } from "@/lib/utils";
+
 const styles = {
   border: "0.0625rem solid #9c9c9c",
   borderRadius: "0.25rem",
@@ -19,6 +21,9 @@ const Canvas = () => {
     bgColor,
     bgImageUrl,
     eraser,
+    saveJpegNumber,
+    savePngNumber,
+    saveSvgNumber,
   } = useStore();
 
   const canvasRef = useRef<any>(null);
@@ -56,6 +61,38 @@ const Canvas = () => {
     if (!canvasRef.current) return;
     setCanvasRef(canvasRef.current);
   }, [canvasRef]);
+
+  useEffect(() => {
+    if (saveJpegNumber === 0) return;
+
+    handleOnSave("jpeg", "ad");
+  }, [saveJpegNumber]);
+
+  useEffect(() => {
+    if (savePngNumber === 0) return;
+
+    handleOnSave("png", "ad");
+  }, [savePngNumber]);
+
+  useEffect(() => {
+    if (saveSvgNumber === 0) return;
+
+    handleOnSave("svg", "ad");
+  }, [saveSvgNumber]);
+
+  async function handleOnSave(type: string, fileName: string) {
+    if (type === "svg") {
+      const svg = await canvasRef.current.exportSvg();
+      //copy to clipboard
+      navigator.clipboard.writeText(svg);
+      console.log("copied");
+      return;
+    }
+
+    const img = await canvasRef.current.exportImage(type);
+
+    // downloadImage(img, fileName);
+  }
 
   function handleOnStroke(currentPath: any) {
     if (currentPath.length === 0) return;

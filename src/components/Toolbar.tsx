@@ -43,7 +43,6 @@ export default function Toolbar() {
     setEraser,
     eraser,
     bgImageUrl,
-    exportSvg,
   } = useStore();
 
   const [bgImageUrlState, setBgImageUrlState] = useState(bgImageUrl);
@@ -63,13 +62,13 @@ export default function Toolbar() {
   function handleExportType(type: string) {
     switch (type) {
       case "jpeg":
-        exportAsImage(canvasRef, "jpeg");
+        exportAsImage("jpeg");
         break;
       case "png":
-        exportAsImage(canvasRef, "png");
+        exportAsImage("png");
         break;
       case "svg":
-        exportSvg(canvasRef);
+        exportAsImage("svg");
         break;
     }
   }
@@ -236,7 +235,6 @@ export default function Toolbar() {
               <Button onClick={() => handleExportType("svg")}>
                 Export as SVG
               </Button>
-              <Button>Export stroke paths in a file</Button>
             </div>
           </PopoverContent>
         </Popover>

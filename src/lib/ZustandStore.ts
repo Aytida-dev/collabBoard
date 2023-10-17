@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { io } from "socket.io-client";
-const socket = io("http://192.168.152.114:5000");
+
+const socket = io("localhost:5000");
 
 type Store = {
   socket: any;
@@ -10,7 +11,9 @@ type Store = {
   strokeWidth: number;
   strokeColor: string; //rgba
   bgColor: string; //rgba
-
+  saveJpegNumber: number;
+  savePngNumber: number;
+  saveSvgNumber: number;
   bgImageUrl: string;
 };
 
@@ -25,14 +28,16 @@ type StoreActions = {
   undo: (canvasRef: Store["canvasRef"]) => void;
 
   clear: (canvasRef: Store["canvasRef"]) => void;
-  exportAsImage: (canvasRef: Store["canvasRef"], type: string) => void;
-  exportSvg: (canvasRef: Store["canvasRef"]) => void;
+  exportAsImage: (type: string) => void;
 };
 
 export const useStore = create<Store & StoreActions>((set) => ({
   socket: socket,
   canvasRef: null,
   eraser: false,
+  saveJpegNumber: 0,
+  savePngNumber: 0,
+  saveSvgNumber: 0,
   eraserWidth: 8,
   strokeWidth: 4,
   strokeColor: "rgba(0,0,0,1)",
@@ -48,11 +53,25 @@ export const useStore = create<Store & StoreActions>((set) => ({
     canvasRef.clearCanvas();
   },
   bgImageUrl: "",
-  exportAsImage: (canvasRef, type) => {
-    console.log(type);
-  },
-  exportSvg: (canvasRef) => {
-    console.log(" svg");
+
+  exportAsImage: (type) => {
+    switch (type) {
+      case "jpeg":
+        set({ saveJpegNumber: Math.random() });
+
+        break;
+      case "png":
+        set({ savePngNumber: Math.random() });
+
+        break;
+      case "svg":
+        set({ saveSvgNumber: Math.random() });
+
+        break;
+
+      default:
+        break;
+    }
   },
 
   setEraser: (canvasRef, eraser) => {
