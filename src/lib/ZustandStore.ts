@@ -42,6 +42,8 @@ export const useStore = create<Store & StoreActions>((set) => ({
   strokeWidth: 4,
   strokeColor: "rgba(0,0,0,1)",
   bgColor: "rgba(255,255,255,1)",
+  bgImageUrl: "",
+
   undo: (canvasRef) => {
     socket.emit("undo-or-clear", { type: "undo" });
     canvasRef.undo();
@@ -52,7 +54,6 @@ export const useStore = create<Store & StoreActions>((set) => ({
 
     canvasRef.clearCanvas();
   },
-  bgImageUrl: "",
 
   exportAsImage: (type) => {
     switch (type) {
@@ -78,6 +79,7 @@ export const useStore = create<Store & StoreActions>((set) => ({
     canvasRef.eraseMode(!eraser);
     set((state) => ({ eraser: !state.eraser }));
   },
+
   setCanvasRef: (canvasRef) => set({ canvasRef: canvasRef }),
   setEraserWidth: (eraserWidth) => set({ eraserWidth: eraserWidth }),
   setStrokeWidth: (strokeWidth) => set({ strokeWidth: strokeWidth }),
