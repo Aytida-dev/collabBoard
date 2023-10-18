@@ -8,7 +8,7 @@ const io = require("socket.io")(server, {
   },
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 app.use(express.json());
 
 io.on("connection", (socket) => {

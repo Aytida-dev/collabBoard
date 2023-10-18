@@ -4,8 +4,6 @@ import { useEffect, useRef } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useStore } from "../lib/ZustandStore";
 
-import { downloadImage } from "@/lib/utils";
-
 const styles = {
   border: "0.0625rem solid #9c9c9c",
   borderRadius: "0.25rem",

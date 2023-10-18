@@ -6,7 +6,6 @@ import {
   BiPencil,
   BiEraser,
   BiUndo,
-  BiRedo,
   BiSave,
   BiImageAdd,
   BiSolidColorFill,

@@ -1,10 +1,11 @@
 import { create } from "zustand";
 import { io } from "socket.io-client";
 
-const socket = io("localhost:5000");
+const socket = io("localhost:4000");
 
 type Store = {
   socket: any;
+  roomId: string;
   canvasRef: any | null;
   eraser: boolean;
   eraserWidth: number;
@@ -19,6 +20,7 @@ type Store = {
 
 type StoreActions = {
   setCanvasRef: (canvasRef: Store["canvasRef"]) => void;
+  setRoomId: (roomId: Store["roomId"]) => void;
   setEraser: (canvasRef: Store["canvasRef"], eraser: boolean) => void;
   setEraserWidth: (eraserWidth: number) => void;
   setStrokeWidth: (strokeWidth: number) => void;
@@ -34,6 +36,7 @@ type StoreActions = {
 export const useStore = create<Store & StoreActions>((set) => ({
   socket: socket,
   canvasRef: null,
+  roomId: "",
   eraser: false,
   saveJpegNumber: 0,
   savePngNumber: 0,
@@ -43,6 +46,8 @@ export const useStore = create<Store & StoreActions>((set) => ({
   strokeColor: "rgba(0,0,0,1)",
   bgColor: "rgba(255,255,255,1)",
   bgImageUrl: "",
+
+  setRoomId: (roomId) => set({ roomId: roomId }),
 
   undo: (canvasRef) => {
     socket.emit("undo-or-clear", { type: "undo" });
