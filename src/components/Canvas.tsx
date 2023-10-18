@@ -12,6 +12,7 @@ const styles = {
 const Canvas = () => {
   const {
     socket,
+    setJoinedUser,
     setCanvasRef,
     strokeWidth,
     eraserWidth,
@@ -37,6 +38,14 @@ const Canvas = () => {
       ({ userName, path }: { userName: string; path: any }) => {
         // console.log(userName , path)
         canvasRef.current.loadPaths([path]);
+      }
+    );
+
+    socket.on(
+      "user-joined",
+      ({ userName, id }: { userName: string; id: number }) => {
+        setJoinedUser(userName, id);
+        console.log("received", userName, id);
       }
     );
 
