@@ -61,10 +61,10 @@ export default function Navbar() {
                   </Badge>
                 </div>
               </SheetHeader>
-              <SheetDescription>
-                <div className="grid grid-cols-3 gap-9">
-                  {joinedUser.length > 0 &&
-                    joinedUser.map(
+
+              <div className="grid grid-cols-3 gap-9">
+                {joinedUser.length > 0
+                  ? joinedUser.map(
                       ({ userName, id }: { userName: string; id: number }) => (
                         <div
                           key={id}
@@ -81,9 +81,9 @@ export default function Navbar() {
                           </Avatar>
                         </div>
                       )
-                    )}
-                </div>
-              </SheetDescription>
+                    )
+                  : ""}
+              </div>
 
               <SheetFooter>
                 <div className="flex justify-between items-center">

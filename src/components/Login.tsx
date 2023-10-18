@@ -68,7 +68,7 @@ export default function Login() {
         <span>Collab_Board</span>
         <div className="w-full flex flex-col justify-between items-start gap-2 group">
           <span className=" opacity-70 group-hover:opacity-100 transition-opacity">
-            How you're going to say hii,
+            How you are going to say hii,
           </span>
           <Input
             placeholder="Your name"

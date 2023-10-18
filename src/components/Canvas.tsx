@@ -91,7 +91,7 @@ const Canvas = () => {
     }
 
     return () => {
-      // dcSocket();
+      dcSocket();
     };
   }, []);
 

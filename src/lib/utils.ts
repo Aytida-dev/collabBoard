@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getAnnotionsByName(name: string) {
   let annotion: string = "";
+  if (name.length === 0) return annotion;
   name.split(" ").map((word: string) => (annotion += word[0].toUpperCase()));
   return annotion;
 }
