@@ -5,6 +5,7 @@ const socket = io("localhost:4000");
 
 type Store = {
   socket: any;
+  userName: string;
   roomId: string;
   canvasRef: any | null;
   eraser: boolean;
@@ -20,6 +21,7 @@ type Store = {
 
 type StoreActions = {
   setCanvasRef: (canvasRef: Store["canvasRef"]) => void;
+  setUserName: (userName: Store["userName"]) => void;
   setRoomId: (roomId: Store["roomId"]) => void;
   setEraser: (canvasRef: Store["canvasRef"], eraser: boolean) => void;
   setEraserWidth: (eraserWidth: number) => void;
@@ -36,7 +38,9 @@ type StoreActions = {
 export const useStore = create<Store & StoreActions>((set) => ({
   socket: socket,
   canvasRef: null,
+  userName: "",
   roomId: "",
+
   eraser: false,
   saveJpegNumber: 0,
   savePngNumber: 0,
@@ -46,6 +50,8 @@ export const useStore = create<Store & StoreActions>((set) => ({
   strokeColor: "rgba(0,0,0,1)",
   bgColor: "rgba(255,255,255,1)",
   bgImageUrl: "",
+
+  setUserName: (userName) => set({ userName: userName }),
 
   setRoomId: (roomId) => set({ roomId: roomId }),
 
