@@ -6,6 +6,7 @@ const socket = io("localhost:4000");
 type Store = {
   socket: any;
   userName: string;
+  joinedUser: any;
   roomId: string;
   canvasRef: any | null;
   eraser: boolean;
@@ -22,16 +23,35 @@ type Store = {
 type StoreActions = {
   setCanvasRef: (canvasRef: Store["canvasRef"]) => void;
   setUserName: (userName: Store["userName"]) => void;
+  setJoinedUser: (userName: string, id: number) => void;
   setRoomId: (roomId: Store["roomId"]) => void;
   setEraser: (canvasRef: Store["canvasRef"], eraser: boolean) => void;
   setEraserWidth: (eraserWidth: number) => void;
   setStrokeWidth: (strokeWidth: number) => void;
   setStrokeColor: (strokeColor: string) => void;
-  setBgColor: (bgColor: string) => void;
-  setBgImageUrl: (bgImageUrl: string) => void;
-  undo: (canvasRef: Store["canvasRef"]) => void;
+  setBgColor: (
+    bgColor: string,
+    userName: string,
+    roomId: string,
+    toSocket: boolean
+  ) => void;
+  setBgImageUrl: (
+    bgImageUrl: string,
+    userName: string,
+    roomId: string,
+    toSocket: boolean
+  ) => void;
+  undo: (
+    canvasRef: Store["canvasRef"],
+    userName: string,
+    roomId: string
+  ) => void;
 
-  clear: (canvasRef: Store["canvasRef"]) => void;
+  clear: (
+    canvasRef: Store["canvasRef"],
+    userName: string,
+    roomId: string
+  ) => void;
   exportAsImage: (type: string) => void;
 };
 
@@ -40,7 +60,12 @@ export const useStore = create<Store & StoreActions>((set) => ({
   canvasRef: null,
   userName: "",
   roomId: "",
-
+  joinedUser: [
+    {
+      userName: "hii",
+      id: 1,
+    },
+  ],
   eraser: false,
   saveJpegNumber: 0,
   savePngNumber: 0,
@@ -55,13 +80,26 @@ export const useStore = create<Store & StoreActions>((set) => ({
 
   setRoomId: (roomId) => set({ roomId: roomId }),
 
-  undo: (canvasRef) => {
-    socket.emit("undo-or-clear", { type: "undo" });
+  setJoinedUser: (userName, id) =>
+    set((state) => ({
+      joinedUser: [...state.joinedUser, { userName: userName, id: id }],
+    })),
+
+  undo: (canvasRef, roomId, userName) => {
+    socket.emit("undo-or-clear", {
+      type: "undo",
+      roomId: roomId,
+      userName: userName,
+    });
     canvasRef.undo();
   },
 
-  clear: (canvasRef) => {
-    socket.emit("undo-or-clear", { type: "clear" });
+  clear: (canvasRef, roomId, userName) => {
+    socket.emit("undo-or-clear", {
+      type: "clear",
+      roomId: roomId,
+      userName: userName,
+    });
 
     canvasRef.clearCanvas();
   },
@@ -95,6 +133,24 @@ export const useStore = create<Store & StoreActions>((set) => ({
   setEraserWidth: (eraserWidth) => set({ eraserWidth: eraserWidth }),
   setStrokeWidth: (strokeWidth) => set({ strokeWidth: strokeWidth }),
   setStrokeColor: (strokeColor) => set({ strokeColor: strokeColor }),
-  setBgColor: (bgColor) => set({ bgColor: bgColor }),
-  setBgImageUrl: (bgImageUrl) => set({ bgImageUrl: bgImageUrl }),
+  setBgColor: (bgColor, roomId, userName, toSocket) => {
+    if (toSocket) {
+      socket.emit("change-bg-color", {
+        bgColor: bgColor,
+        roomId: roomId,
+        userName: userName,
+      });
+    }
+    set({ bgColor: bgColor });
+  },
+  setBgImageUrl: (bgImageUrl, roomId, userName, toSocket) => {
+    if (toSocket) {
+      socket.emit("change-bg-image", {
+        bgImageUrl: bgImageUrl,
+        roomId: roomId,
+        userName: userName,
+      });
+    }
+    set({ bgImageUrl: bgImageUrl });
+  },
 }));

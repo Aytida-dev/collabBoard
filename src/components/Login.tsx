@@ -19,7 +19,7 @@ export default function Login() {
   const user = z.object({
     inputUserName: z
       .string()
-      .regex(/^[A-Za-z0-9]*$/, {
+      .regex(/^[A-Za-z0-9\s]*$/, {
         message: "Only characters and numbers are allowed",
       })
       .min(5, {
@@ -49,9 +49,12 @@ export default function Login() {
     try {
       user.parse({ inputUserName, inputRoomId });
       setLoading(true);
-      socket.emit("create-room", { roomId: inputRoomId });
       updateUserName();
       setRoomId(inputRoomId);
+      socket.emit("create-room", {
+        roomId: inputRoomId,
+        userName: inputUserName,
+      });
       router.push(`/${inputUserName}/${inputRoomId}`);
     } catch (error: any) {
       const allError = { ...error }.issues;
@@ -96,7 +99,7 @@ export default function Login() {
             )}
           </Button>
           <span>OR</span>
-          <Button className="w-full">
+          <Button className="w-full" onClick={() => createRoom()}>
             {loading ? (
               <Loader className=" animate-spin" size={20} />
             ) : (

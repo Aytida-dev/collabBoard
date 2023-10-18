@@ -14,9 +14,13 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "./ui/sheet";
-import { users } from "../lib/testData";
+
 import { getAnnotionsByName } from "@/lib/utils";
+import { useStore } from "@/lib/ZustandStore";
+
 export default function Navbar() {
+  const { joinedUser } = useStore();
+
   return (
     <div className=" h-16 m-auto bg-black flex md:w-10/12 justify-between items-center px-6 md:rounded-xl md:mt-4 ">
       <div className="logo">logo</div>
@@ -41,22 +45,25 @@ export default function Navbar() {
               </SheetHeader>
               <SheetDescription>
                 <div className="grid grid-cols-3 gap-9">
-                  {users.map(({ name, img, id, color }) => (
-                    <div
-                      key={id}
-                      className={`w-11 border-2 rounded-full`}
-                      style={{
-                        borderColor: color,
-                      }}
-                    >
-                      <Avatar>
-                        <AvatarImage src={img} className="rounded-full" />
-                        <AvatarFallback className="rounded-full h-9">
-                          {getAnnotionsByName(name)}
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                  ))}
+                  {joinedUser.length > 0 &&
+                    joinedUser.map(
+                      ({ userName, id }: { userName: string; id: number }) => (
+                        <div
+                          key={id}
+                          className={`w-11 border-2 rounded-full`}
+                          style={{
+                            borderColor: "red",
+                          }}
+                        >
+                          <Avatar>
+                            {/* <AvatarImage src={img} className="rounded-full" /> */}
+                            <AvatarFallback className="rounded-full h-9">
+                              {getAnnotionsByName(userName)}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                      )
+                    )}
                 </div>
               </SheetDescription>
 

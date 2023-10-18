@@ -25,6 +25,8 @@ import { useState } from "react";
 
 export default function Toolbar() {
   const {
+    userName,
+    roomId,
     canvasRef,
     exportAsImage,
     setStrokeWidth,
@@ -49,11 +51,11 @@ export default function Toolbar() {
   function undoRedoAndClear(type: string) {
     switch (type) {
       case "undo":
-        undo(canvasRef);
+        undo(canvasRef, roomId, userName);
         break;
 
       case "clear":
-        clear(canvasRef);
+        clear(canvasRef, roomId, userName);
         break;
     }
   }
@@ -165,13 +167,17 @@ export default function Toolbar() {
                 <span>Background Color</span>
                 <RgbaStringColorPicker
                   color={bgColor}
-                  onChange={(color) => setBgColor(color)}
+                  onChange={(color) =>
+                    setBgColor(color, roomId, userName, true)
+                  }
                 />
                 <Input
                   className=""
                   type="text"
                   value={bgColor}
-                  onChange={(e) => setBgColor(e.target.value)}
+                  onChange={(e) =>
+                    setBgColor(e.target.value, roomId, userName, true)
+                  }
                 />
               </div>
             </div>
@@ -205,7 +211,11 @@ export default function Toolbar() {
                   value={bgImageUrlState}
                   onChange={(e) => setBgImageUrlState(e.target.value)}
                 />
-                <Button onClick={() => setBgImageUrl(bgImageUrlState)}>
+                <Button
+                  onClick={() =>
+                    setBgImageUrl(bgImageUrlState, roomId, userName, true)
+                  }
+                >
                   Apply
                 </Button>
               </div>
