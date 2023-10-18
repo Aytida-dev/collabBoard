@@ -60,12 +60,7 @@ export const useStore = create<Store & StoreActions>((set) => ({
   canvasRef: null,
   userName: "",
   roomId: "",
-  joinedUser: [
-    {
-      userName: "hii",
-      id: 1,
-    },
-  ],
+  joinedUser: [],
   eraser: false,
   saveJpegNumber: 0,
   savePngNumber: 0,

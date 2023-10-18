@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { ReactSketchCanvas } from "react-sketch-canvas";
 import { useStore } from "../lib/ZustandStore";
+import { toast } from "sonner";
+import { downloadImage } from "@/lib/utils";
 
 const styles = {
   border: "0.0625rem solid #9c9c9c",
@@ -32,6 +34,7 @@ const Canvas = () => {
   const canvasRef = useRef<any>(null);
 
   useEffect(() => {
+    toast.success("Room created");
     socket.on("connect", () => console.log("connected"));
     socket.on(
       "received-drawing",
@@ -84,7 +87,7 @@ const Canvas = () => {
     function dcSocket() {
       socket.off("received-drawing");
       socket.off("undo-or-clear");
-      // socket.disconnect();
+      socket.disconnect();
     }
 
     return () => {
@@ -121,12 +124,18 @@ const Canvas = () => {
       //copy to clipboard
       navigator.clipboard.writeText(svg);
 
+      toast.success("copied SVG to clipboard");
+
       return;
     }
 
     const img = await canvasRef.current.exportImage(type);
-
-    // downloadImage(img, fileName);
+    try {
+      downloadImage(img, fileName);
+      toast.success("downloading");
+    } catch (err) {
+      toast.error("download failed");
+    }
   }
 
   function handleOnStroke(currentPath: any) {

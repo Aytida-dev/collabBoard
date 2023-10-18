@@ -21,6 +21,10 @@ io.on("connection", (socket) => {
       .emit("user-joined", { userName: userName, id: Math.random() });
   });
 
+  socket.on("leave-room", ({ roomId }) => {
+    socket.leave(roomId);
+  });
+
   socket.on("drawing", ({ roomId, userName, path }) => {
     socket
       .to(roomId)

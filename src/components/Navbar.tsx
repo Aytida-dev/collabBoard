@@ -17,9 +17,23 @@ import {
 
 import { getAnnotionsByName } from "@/lib/utils";
 import { useStore } from "@/lib/ZustandStore";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
-  const { joinedUser } = useStore();
+  const { joinedUser, roomId, userName, socket } = useStore();
+
+  const router = useRouter();
+
+  function handleCopy() {
+    navigator.clipboard.writeText(roomId);
+    toast.success("copied Room ID to clipboard");
+  }
+
+  function leaveRoom() {
+    socket.emit("leave-room", { roomId: roomId, userName: userName });
+    router.replace("/");
+  }
 
   return (
     <div className=" h-16 m-auto bg-black flex md:w-10/12 justify-between items-center px-6 md:rounded-xl md:mt-4 ">
@@ -37,8 +51,12 @@ export default function Navbar() {
                   <Button>
                     <AiOutlineUserAdd />
                   </Button>
-                  <Badge variant={"secondary"}>
-                    <span>12323em23ioj29342</span>
+                  <Badge
+                    variant={"secondary"}
+                    onClick={() => handleCopy()}
+                    className=" cursor-pointer"
+                  >
+                    <span>{roomId}</span>
                     <BiCopy className=" opacity-70 mx-3" />
                   </Badge>
                 </div>
@@ -70,10 +88,14 @@ export default function Navbar() {
               <SheetFooter>
                 <div className="flex justify-between items-center">
                   <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
+                    {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+                    <AvatarFallback>
+                      {getAnnotionsByName(userName)}
+                    </AvatarFallback>
                   </Avatar>
-                  <Button variant={"destructive"}>leave Room</Button>
+                  <Button variant={"destructive"} onClick={() => leaveRoom()}>
+                    leave Room
+                  </Button>
                 </div>
               </SheetFooter>
             </div>
@@ -82,9 +104,9 @@ export default function Navbar() {
       </div>
 
       <div className=" hidden md:flex justify-between items-center gap-5">
-        <div className="room" onClick={() => console.log("hii")}>
+        <div className="room cursor-pointer" onClick={() => handleCopy()}>
           <Badge variant={"secondary"}>
-            <span>12323em23ioj29342</span>
+            <span>{roomId}</span>
             <BiCopy className=" opacity-70 mx-3" />
           </Badge>
         </div>
@@ -94,9 +116,12 @@ export default function Navbar() {
         </Button>
 
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
+          {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
+          <AvatarFallback>{getAnnotionsByName(userName)}</AvatarFallback>
         </Avatar>
+        <Button variant={"destructive"} onClick={() => leaveRoom()}>
+          l
+        </Button>
       </div>
     </div>
   );
