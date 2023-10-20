@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useStore } from "@/lib/ZustandStore";
@@ -15,6 +15,22 @@ export default function Login() {
   const [inputRoomId, setInputRoomId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  function getRandomColor() {
+    // Generate a random number between 0 and 16777215 (2^24 - 1) and convert it to a hexadecimal string
+    const randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+
+    return randomColor;
+  }
+
+  useEffect(() => {
+    const parent = parentRef.current;
+
+    if (parent) {
+      parent.style.backgroundImage = `linear-gradient(to right, ${getRandomColor()}, ${getRandomColor()})`;
+    }
+  }, []);
 
   const user = z.object({
     inputUserName: z
@@ -63,10 +79,18 @@ export default function Login() {
   }
 
   return (
-    <div className="absolute top-0 right-0 left-0 bottom-0 bg-black flex justify-center items-center">
-      <div className="border w-full h-full px-10 py-40 border-gray-600 md:w-[500px] md:h-[600px] rounded-md flex flex-col justify-between items-center md:py-20 md:px-20">
-        <span>Collab_Board</span>
-        <div className="w-full flex flex-col justify-between items-start gap-2 group">
+    <div
+      ref={parentRef}
+      className="absolute top-0 right-0 left-0 bottom-0 bg-black flex justify-center items-center  "
+    >
+      <div className="border w-full h-full px-10 py-40 border-gray-600 md:w-[500px] md:h-[600px] rounded-md flex flex-col justify-between items-center md:py-10 md:px-20 group ">
+        <div className="flex flex-col gap-3">
+          <span className=" text-5xl w-full text-center">Collab Slate</span>
+          <span className=" text-md w-full text-center">
+            Build Ideas Together
+          </span>
+        </div>
+        <div className="w-full flex flex-col justify-between items-start gap-2 ">
           <span className=" opacity-70 group-hover:opacity-100 transition-opacity">
             How you are going to say hii,
           </span>
@@ -74,6 +98,7 @@ export default function Login() {
             placeholder="Your name"
             value={inputUserName}
             onChange={(e) => setInputUserName(e.target.value)}
+            className="bg-transparent placeholder:text-white"
           />
         </div>
         <div className="w-full flex flex-col justify-between items-start gap-2 group">
@@ -84,6 +109,7 @@ export default function Login() {
             placeholder="Room Id"
             value={inputRoomId}
             onChange={(e) => setInputRoomId(e.target.value)}
+            className="bg-transparent placeholder:text-white"
           />
         </div>
         <div className="w-full flex flex-col justify-between items-center gap-5 ">
